@@ -4,10 +4,9 @@ A responsive Doctor Dashboard built with **Next.js**, **TypeScript**, and **Tail
 
 ---
 
-##  Getting Started
+## 🚀 Getting Started
 
-1. **Clone the repository**
-
+### 1. **Clone the repository**
 
 git clone https://github.com/your-username/doctor-dashboard.git
 cd doctor-dashboard
@@ -19,24 +18,27 @@ yarn install
 pnpm install
 # or
 bun install
-Open http://localhost:3000 to view the app in your browser.
-You can start editing the homepage by modifying app/page.tsx.
 
-Live Demo: https://doctor-dashboard-liart.vercel.app/
+npm run dev
+# or
+yarn dev
+
+live demo : https://doctor-app-pallavilagisettis-projects.vercel.app/
 
 
-Next.js (App Router) was chosen for routing and performance benefits.
+Next.js (App Router) — for modern routing and performance benefits.
 
-Tailwind CSS used for consistent and responsive styling.
+TypeScript — for type safety and maintainability.
 
-TypeScript added for type safety and maintainability.
+Tailwind CSS — for consistent and responsive styling.
 
-Used next/font to load Geist font for better performance and design consistency.
+Redux Toolkit + React-Redux — for scalable global state management.
 
-React Context API handles user and global state. Scalable to Redux if needed.
+next/font — to load the Geist font for performance and design consistency.
 
-Assumed a backend provides appointment and user data via REST API.
+JWT-based Authentication — assumed, using localStorage or cookies.
 
-JWT token-based authentication assumed; stored in localStorage or cookies.
+REST API Backend — assumed for user and appointment data.
 
-Deployed via Vercel for seamless CI/CD and integration with GitHub.
+
+
