@@ -1,10 +1,10 @@
-'use client'
+'use client';
+
 import React, { useEffect, useState } from 'react';
-import { DashboardProvider, useDashboard, Appointment } from './context';
-import Filters from './Filters';
-import StatusCount from './StatusCount';
-import AppointmentList from './AppointmentList';
-import RescheduleModal from './RescheduleModal';
+import { useAppDispatch } from '@/app/redux/hooks';
+import { setAppointments } from '@/app/redux/dashboardSlice';
+import { Filters, StatusCount, AppointmentList, RescheduleModal } from '.';
+import { Appointment } from '@/app/redux/dashboardSlice';
 
 const fetchAppointments = async (): Promise<Appointment[]> => {
   return [
@@ -29,14 +29,14 @@ const fetchAppointments = async (): Promise<Appointment[]> => {
   ];
 };
 
-const DashboardContent = () => {
-  const { setAppointments } = useDashboard();
+const DashboardPage = () => {
+  const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedAppt, setSelectedAppt] = useState<Appointment | undefined>(undefined);
 
   useEffect(() => {
-    fetchAppointments().then(setAppointments);
-  }, [setAppointments]);
+    fetchAppointments().then((data) => dispatch(setAppointments(data)));
+  }, [dispatch]);
 
   const handleReschedule = (appt: Appointment) => {
     setSelectedAppt(appt);
@@ -66,10 +66,4 @@ const DashboardContent = () => {
   );
 };
 
-const DashboardPage = () => (
-  <DashboardProvider>
-    <DashboardContent />
-  </DashboardProvider>
-);
-
-export default DashboardPage; 
+export default DashboardPage;

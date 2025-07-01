@@ -1,5 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
+
+
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -13,7 +15,9 @@ export default function Home() {
           height={38}
           priority
         />
-        <h1 className="text-5xl font-extrabold text-gray-900 mb-2 tracking-tight text-center">Welcome to Doctor Assignment</h1>
+        <h1 className="text-5xl font-extrabold text-gray-900 mb-2 tracking-tight text-center">
+          Welcome to Doctor Assignment
+        </h1>
         <p className="text-lg text-gray-700 font-medium text-center max-w-xl">
           Manage your appointments efficiently and professionally. Get started by continuing to your dashboard.
         </p>

@@ -1,6 +1,7 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
-import { Appointment, useDashboard } from './context';
+import { useAppDispatch } from '@/app/redux/hooks';
+import { rescheduleAppointment, Appointment } from '@/app/redux/dashboardSlice';
 
 interface RescheduleModalProps {
   open: boolean;
@@ -9,12 +10,12 @@ interface RescheduleModalProps {
 }
 
 const RescheduleModal: React.FC<RescheduleModalProps> = ({ open, appointment, onClose }) => {
-  const { reschedule } = useDashboard();
+  const dispatch = useAppDispatch();
   const [newTime, setNewTime] = useState('');
 
   useEffect(() => {
     if (appointment) {
-      setNewTime(appointment.time.slice(0, 16)); 
+      setNewTime(appointment.time.slice(0, 16)); // for datetime-local input
     }
   }, [appointment]);
 
@@ -23,7 +24,12 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({ open, appointment, on
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newTime) {
-      reschedule(appointment.id, new Date(newTime).toISOString());
+      dispatch(
+        rescheduleAppointment({
+          id: appointment.id,
+          newDate: new Date(newTime).toISOString(),
+        })
+      );
       onClose();
     }
   };
@@ -47,15 +53,26 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({ open, appointment, on
               <input
                 type="datetime-local"
                 value={newTime}
-                onChange={e => setNewTime(e.target.value)}
+                onChange={(e) => setNewTime(e.target.value)}
                 required
                 className="mt-2 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 px-3 py-2 text-base"
               />
             </label>
           </div>
           <div className="flex gap-3 justify-end">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium">Cancel</button>
-            <button type="submit" className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium shadow">Save</button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium shadow"
+            >
+              Save
+            </button>
           </div>
         </form>
       </div>
@@ -63,4 +80,4 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({ open, appointment, on
   );
 };
 
-export default RescheduleModal; 
+export default RescheduleModal;
