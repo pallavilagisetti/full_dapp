@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/app/redux/store';
+import { useAppSelector } from '@/app/redux/hooks';
 
 const statusStyles = {
   confirmed: 'bg-blue-100 text-blue-800',
@@ -16,19 +15,7 @@ const statusIcons = {
 };
 
 const StatusCount = () => {
-  const appointments = useSelector((state: RootState) => state.dashboard.appointments);
-
-  const statusCounts = appointments.reduce(
-    (acc, appt) => {
-      acc[appt.status] += 1;
-      return acc;
-    },
-    {
-      confirmed: 0,
-      pending: 0,
-      completed: 0,
-    }
-  );
+  const statusCounts = useAppSelector((state) => state.dashboard.statusCount);
 
   return (
     <div className="flex gap-4 mb-8 justify-center">

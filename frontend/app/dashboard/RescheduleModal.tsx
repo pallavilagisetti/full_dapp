@@ -1,17 +1,17 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useAppDispatch } from '@/app/redux/hooks';
-import { rescheduleAppointment, Appointment } from '@/app/redux/dashboardSlice';
+import { Appointment } from '@/app/redux/dashboardSlice';
 
 interface RescheduleModalProps {
   open: boolean;
   appointment?: Appointment;
   onClose: () => void;
+  onSubmit: (appointmentId: number, newDate: string) => Promise<void>;
 }
 
-const RescheduleModal: React.FC<RescheduleModalProps> = ({ open, appointment, onClose }) => {
-  const dispatch = useAppDispatch();
+const RescheduleModal: React.FC<RescheduleModalProps> = ({ open, appointment, onClose, onSubmit }) => {
   const [newTime, setNewTime] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (appointment) {
@@ -21,16 +21,17 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({ open, appointment, on
 
   if (!open || !appointment) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newTime) {
-      dispatch(
-        rescheduleAppointment({
-          id: appointment.id,
-          newDate: new Date(newTime).toISOString(),
-        })
-      );
-      onClose();
+    if (newTime && appointment) {
+      setIsSubmitting(true);
+      try {
+        await onSubmit(appointment.id, new Date(newTime).toISOString());
+      } catch (error) {
+        console.error('Failed to reschedule:', error);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -69,9 +70,10 @@ const RescheduleModal: React.FC<RescheduleModalProps> = ({ open, appointment, on
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium shadow"
+              disabled={isSubmitting}
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium shadow disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Save
+              {isSubmitting ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>

@@ -1,18 +1,28 @@
 'use client';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/app/redux/store';
-import { setFilter } from '@/app/redux/dashboardSlice';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
+import { setFilter, fetchAppointments } from '@/app/redux/dashboardSlice';
 
 const statusOptions = ['all', 'confirmed', 'pending', 'completed'] as const;
 
 const Filters = () => {
-  const dispatch = useDispatch();
-  const filter = useSelector((state: RootState) => state.dashboard.filter);
+  const dispatch = useAppDispatch();
+  const filter = useAppSelector((state) => state.dashboard.filter);
 
   const handleChange = (key: string, value: string | null) => {
-    dispatch(setFilter({ ...filter, [key]: value }));
+    const newFilter = { ...filter, [key]: value };
+    dispatch(setFilter(newFilter));
   };
+
+  // Trigger API call when filters change
+  useEffect(() => {
+    const filters = {
+      status: filter.status === 'all' ? undefined : filter.status,
+      startDate: filter.startDate || undefined,
+      endDate: filter.endDate || undefined,
+    };
+    dispatch(fetchAppointments(filters));
+  }, [filter, dispatch]);
 
   return (
     <div className="filters bg-white/80 rounded-xl shadow flex flex-wrap gap-4 mb-8 px-4 py-4 items-end border border-gray-100">
