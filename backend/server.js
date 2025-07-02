@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(morgan('combined'));
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: '*',  // Allow all origins
   credentials: true
 }));
 app.use(express.json());
